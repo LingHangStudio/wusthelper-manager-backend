@@ -1,0 +1,48 @@
+Server:
+  Env: dev
+  Port: 1192
+  Address: '127.0.0.1'
+  BaseUrl: '/'
+  TokenSecret: 'qwedqweyuqeuyg2i'
+  TokenTimeout: 1200
+  LogLocation: './logs/server.log'
+  FileStorageOption:
+    UploadFileLocalTmpPath: './tmp/upload'
+    ResourceStorageOption:
+      WusthelperReleaseFileKey: 'app/wusthelper_latest.apk'
+      VersionFileStorageBasePath: 'resource/update-files'
+      PicStorageBasePath: 'static/img'
+      DefaultPicUrl: 'https://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png'
+    AliyunOssOption:
+      AccessKeyId: ''
+      AccessKeySecret: ''
+      Endpoint: 'oss-cn-guangzhou.aliyuncs.com'
+      Bucket: 'wusthelper-resource-test'
+      BucketBindDomain: 'wusthelper-manager-test.ciduid.top'
+Wusthelper:
+  Upstream: ''
+  Timeout: 0
+  Proxy: ''
+  TokenKey: ''
+  AdminBaseUrl: ''
+Database:
+  Host: 127.0.0.1
+  Port: 3306
+  Username: root
+  Password: Test2333!
+  DbName: wusthelper_manager
+  PrintSql: true
+  ExtraParams:
+    useUnicode: 'true'
+    characterEncoding: utf-8
+    useSSL: 'false'
+    serverTimezone: Asia/Shanghai
+Redis:
+  Addr: 127.0.0.1:6379
+  ClientName: wusthelper_manager
+  Username: default
+  Password: Test2333!
+  DB: 2
+  MaxRetries: 4
+  MinIdleConns: 2
+  MaxIdleConns: 16
