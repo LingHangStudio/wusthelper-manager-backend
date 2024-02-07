@@ -84,7 +84,6 @@ func setupAdminRouter(rootRouter *gin.RouterGroup) {
 				responseData(context, map[string]string{"version": "1.0.0", "time": "2021-02-19 17:25:30"})
 			})
 			mainLog.POST("/publishLog", publishLog)
-			mainLog.POST("/getNewLog", getPublishedLogList)
 		}
 
 		configRouter := admin.Group("/config", auth.AdminUserTokenCheck)
@@ -186,7 +185,7 @@ func setupPublicApiRouter(rootRouter *gin.RouterGroup) {
 		wusthelper.GET("/notice", getPublishedAnnouncement)
 		wusthelper.GET("/act", getPublishedBannerList)
 		wusthelper.GET("/config", getConfigListPublic)
-		wusthelper.GET("/log")
+		wusthelper.GET("/log", getPublishedLogList)
 		wusthelper.GET("/version", getLatestVersion)
 	}
 }

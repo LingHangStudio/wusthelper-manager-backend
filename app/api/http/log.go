@@ -56,7 +56,9 @@ type PublishedLogResp struct {
 	Title      string `json:"title"`
 	Content    string `json:"content"`
 	Version    string `json:"version"`
-	CreateTime string `json:"createTime"`
+	Status     int8   `json:"status"`
+	Platform   string `json:"platform"`
+	UpdateTime string `json:"updateTime"`
 }
 
 func getPublishedLogList(c *gin.Context) {
@@ -77,10 +79,13 @@ func getPublishedLogList(c *gin.Context) {
 	publishedLogList := make([]PublishedLogResp, len(*resultList))
 	for i, logInfo := range *resultList {
 		publishedLogList[i] = PublishedLogResp{
-			Logid:   logInfo.ID,
-			Title:   *logInfo.Title,
-			Content: *logInfo.Content,
-			Version: *logInfo.VersionText,
+			Logid:      logInfo.ID,
+			Title:      *logInfo.Title,
+			Content:    *logInfo.Content,
+			Version:    *logInfo.Content,
+			Status:     _internalLogStatus2ApiDefineStatus(*logInfo.Status),
+			Platform:   *logInfo.Platform,
+			UpdateTime: logInfo.UpdateTime.Format(_defaultDateTimeFormat),
 		}
 	}
 
