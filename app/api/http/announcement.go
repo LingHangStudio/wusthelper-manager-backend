@@ -28,7 +28,7 @@ func getPublishedAnnouncement(c *gin.Context) {
 	for i, announcement := range *announcements {
 		updateTime := announcement.UpdateTime.Format(_defaultDateTimeFormat)
 		resp[i] = PublishedAnnouncementResp{
-			Id:         announcement.Id,
+			Id:         int64(i),
 			Title:      announcement.Title,
 			Content:    announcement.Content,
 			Obj:        announcement.Target,

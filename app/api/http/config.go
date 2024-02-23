@@ -41,7 +41,12 @@ func getConfigListPublic(c *gin.Context) {
 				case "scheduleVersion":
 					resp["schedule"].(map[string]string)[*conf.Name] = *conf.Value
 				default:
-					resp[*conf.Name] = *conf.Value
+					// 小程序的0和1需要手动设置...
+					if *conf.Value == "0" || *conf.Value == "1" {
+						resp[*conf.Name], _ = strconv.ParseInt(*conf.Value, 10, 32)
+					} else {
+						resp[*conf.Name] = *conf.Value
+					}
 				}
 			}
 		}
@@ -77,30 +82,31 @@ func getConfigListPublic(c *gin.Context) {
 	}
 
 	if terms != nil {
-		termResp := make([]TermListResp, len(*terms))
-		for i, term := range *terms {
-			switch platform {
-			default:
-				termResp[i] = TermListResp{
-					Id:        term.ID,
-					Term:      *term.Term,
-					StartDate: term.Start.Format(_defaultDateFormat),
-				}
-			case _platformAndroid:
-				// 安卓端需要转换成时间戳
-				termResp[i] = TermListResp{
-					Id:        term.ID,
-					Term:      *term.Term,
-					StartDate: strconv.FormatInt(term.Start.UnixMilli(), 10),
-				}
-			}
-		}
-
 		// 令人疑惑的termList
 		switch platform {
 		case _platformMp:
+			termResp := make([]string, 0, len(*terms))
+			for _, term := range *terms {
+				termResp = append(termResp, *term.Term)
+			}
+
 			resp["termList"] = termResp
-		default:
+		case _platformIos:
+			termResp := map[string]string{}
+			for _, term := range *terms {
+				termResp[*term.Term] = term.Start.Format(_defaultDateFormat)
+			}
+
+			resp["termSetting"] = termResp
+		case _platformAndroid:
+			termResp := make([]map[string]string, 0)
+			for _, term := range *terms {
+				// 安卓端需要转换成时间戳
+				termResp = append(termResp, map[string]string{
+					"term":      *term.Term,
+					"startDate": strconv.FormatInt(term.Start.UnixMilli(), 10),
+				})
+			}
 			resp["termSetting"] = termResp
 		}
 	}
@@ -200,8 +206,11 @@ func addConfig(c *gin.Context) {
 		Platform:       req.Platform,
 	}
 
-	if req.Type == model.ConfigValueTypeBool {
+	switch req.Type {
+	case model.ConfigValueTypeBool:
 		conf.PossibleValues = []string{"true", "false"}
+	case model.ConfigValueTypeString:
+		conf.PossibleValues = []string{}
 	}
 
 	err := srv.AddConfig(&conf)

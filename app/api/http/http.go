@@ -24,8 +24,8 @@ func NewEngine(c *conf.Config, baseUrl string) (*gin.Engine, error) {
 	engine.Use(middleware.GlobalPanicRecover)
 	corsConfig := cors.DefaultConfig()
 	corsConfig.AllowAllOrigins = true
-	corsConfig.AllowHeaders = []string{"*"}
-	corsConfig.AllowMethods = []string{"*"}
+	corsConfig.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "Platform", "Token"}
+	corsConfig.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
 	corsConfig.AllowPrivateNetwork = true
 	corsConfig.MaxAge = time.Second
 	engine.Use(cors.New(corsConfig))
@@ -97,11 +97,11 @@ func setupAdminRouter(rootRouter *gin.RouterGroup) {
 
 		user := admin.Group("/data", auth.AdminUserTokenCheck)
 		{
-			user.GET("/getAllUser")    // 通过学院和专业来查询学生
-			user.GET("/getOne")        // 通过姓名和学号来查询学生
-			user.GET("/getCollegeNum") // 查询学院及其专业信息
-			user.GET("/getAddUser")    // 查询增长的用户数
-			user.GET("/getNum")        // 查询用户总数
+			user.GET("/getAllUser", getUserList)           // 通过学院和专业来查询学生
+			user.GET("/getOne", getUser)                   // 通过姓名和学号来查询学生
+			user.GET("/getCollegeNum", getCollegeList)     // 查询学院及其专业信息
+			user.GET("/getAddUser", getIncreasedUserCount) // 查询增长的用户数
+			user.GET("/getNum", getTotalUser)              // 查询用户总数
 		}
 
 		adminUser := admin.Group("/user")

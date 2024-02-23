@@ -82,7 +82,7 @@ func getPublishedBannerList(c *gin.Context) {
 	publishedBannerList := make([]PublishedBannerResp, len(*resultList))
 	for i, banner := range *resultList {
 		publishedBannerList[i] = PublishedBannerResp{
-			Actid:      banner.ID,
+			Actid:      int64(i),
 			Title:      *banner.Title,
 			Content:    *banner.Link,
 			ImgUrl:     _getPicUrl(*banner.Img),

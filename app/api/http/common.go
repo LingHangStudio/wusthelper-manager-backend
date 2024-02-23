@@ -125,7 +125,7 @@ func responseWithCode(c *gin.Context, code int, msg string, data any) {
 func responseData(c *gin.Context, data any) {
 	resp := gin.H{
 		"code": ecode.OK.Code(),
-		"msg":  "ok",
+		"msg":  "成功",
 		"data": data,
 	}
 
