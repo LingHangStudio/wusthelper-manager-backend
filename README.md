@@ -1,4 +1,4 @@
-# Debhelper Manager
+# Wusthelper Manager Backend
 
 武科大助手管理端
 
